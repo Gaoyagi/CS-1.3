@@ -79,6 +79,10 @@ class LinkedList(object):
         if not (0 <= index < self.size):
             raise ValueError('List index out of range: {}'.format(index))
         # TODO: Find the node at the given index and return its data
+        iterate = self.head
+        for x in range(index):
+            iterate = iterate.next
+        return iterate.data
 
     def insert_at_index(self, index, item):
         """Insert the given item at the given index in this linked list, or
@@ -89,6 +93,25 @@ class LinkedList(object):
         if not (0 <= index <= self.size):
             raise ValueError('List index out of range: {}'.format(index))
         # TODO: Find the node before the given index and insert item after it
+        if self.size==0:
+            self.append(item)
+            return
+        elif index == 0:
+            self.prepend(item)
+        elif index == self.size:
+            self.append(item)
+        else:
+            num = 0
+            iterate = self.head
+            while iterate.next!=None:
+                if num==index:
+                    break
+                iterate = iterate.next
+                num+=1
+            temp = iterate.next
+            iterate.next = Node(item)
+            iterate.next.next = temp
+            self.size+=1
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
@@ -104,6 +127,7 @@ class LinkedList(object):
             self.tail.next = new_node
         # Update tail to new node regardless
         self.tail = new_node
+        self.size+=1
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
@@ -119,6 +143,7 @@ class LinkedList(object):
             new_node.next = self.head
         # Update head to new node regardless
         self.head = new_node
+        self.size+=1
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
@@ -145,7 +170,21 @@ class LinkedList(object):
         Worst case running time: ??? under what conditions? [TODO]"""
         # TODO: Find the node containing the given old_item and replace its
         # data with new_item, without creating a new node object
-        pass
+        found = False
+        iterate = self.head
+        while iterate.data!=old_item: 
+            if iterate.next==None:
+                break
+            iterate = iterate.next
+        
+        if iterate.data==old_item:
+            found = True
+        if found:
+            iterate.data = new_item
+        else:
+             raise ValueError('Not in list')
+       
+        
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
@@ -189,6 +228,7 @@ class LinkedList(object):
                     previous.next = None
                 # Update tail to the previous node regardless
                 self.tail = previous
+            self.size-=1
         else:
             # Otherwise raise an error to tell the user that delete has failed
             raise ValueError('Item not found: {}'.format(item))
