@@ -61,7 +61,7 @@ class LinkedStack(object):
         Running time: O(???) – Why? [TODO]"""
         # TODO: Remove and return top item, if any
         if self.is_empty():
-            raise ValueError('empty lsit')
+            raise ValueError('empty stack')
         else:
             temp = self.list.head
             self.list.head = self.list.head.next
